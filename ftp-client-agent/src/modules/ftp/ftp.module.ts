@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common'
-import { FTPController } from './ftp.controller'
 import { FTPGateway } from './ftp.gateway'
-import { SessionModule } from '../session/session.module'
-import { SessionService } from '../session/session.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { Session } from '../session/session.entity'
 
 @Module({
-  imports: [SessionModule, SessionService],
-  controllers: [FTPController],
-  providers: [FTPGateway, SessionModule]
+  imports: [TypeOrmModule.forFeature([Session])],
+  providers: [FTPGateway]
 })
-export class FTPModule {
-}
+export class FTPModule {}

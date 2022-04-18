@@ -1,55 +1,118 @@
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets'
-import { Client, FileType } from 'basic-ftp'
-import { IFileDTO } from '../fs/fs.dto'
-import * as path from 'path'
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WsException } from '@nestjs/websockets'
 import { Socket } from 'socket.io'
-import { SessionService } from '../session/session.service'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Session } from '../session/session.entity'
+import { Repository } from 'typeorm'
+import { R } from '../../utils/response'
+import { ls, mkdir, mv, rm, get, put } from './ftp.function'
+import { Client } from 'basic-ftp'
+import { IFile } from 'test/ftp.api'
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ namespace: '/ftp', cors: { origin: '*' } })
 export class FTPGateway {
-  constructor(private readonly sessionService: SessionService) {
-  }
+  private readonly ctx: Map<number, Client> = new Map<number, Client>()
 
-  @SubscribeMessage('events')
-  async findAll(@MessageBody() data: any) {
-    return 1
-  }
+  constructor(
+    @InjectRepository(Session)
+    private readonly sessionRepository: Repository<Session>
+  ) {}
 
-  @SubscribeMessage('test1')
-  async test1(@MessageBody() data: any) {
-    return data
-  }
-
-  @SubscribeMessage('/ls')
-  async ls(@ConnectedSocket() socket: Socket, @MessageBody('sessionId') sessionId: number, @MessageBody('src') src: string): Promise<IFileDTO[]> {
-    const client = new Client()
-    await client.access({
-      host: '192.192.192.6',
-      port: 21,
-      user: 'icefery',
-      password: 'icefery'
-    })
-    const list = await client.list(src)
-    const data = list.reduce<IFileDTO[]>((prev, curr) => {
-      const filename = curr.name
-      const filepath = path.join(src, filename)
-      const filesize = curr.size
-      const filetype = curr.type === FileType.Directory ? 'd' : curr.type === FileType.File ? '-' : 'unknown'
-      if (filetype !== 'unknown') {
-        prev.push({ type: filetype, name: filename, path: filepath, size: filesize })
+  async beforeCommand(sessionId: number) {
+    if (!this.ctx.has(sessionId)) {
+      const session = await this.sessionRepository.findOneBy({ id: sessionId })
+      if (!session) {
+        throw new WsException(`Session [${sessionId}] does not exist`)
       }
-      return prev
-    }, [])
-    client.close()
-    return data
+      const client = new Client()
+      await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
+      this.ctx.set(sessionId, client)
+    }
   }
 
-  @SubscribeMessage('/mkdir')
-  async mkdir(@ConnectedSocket() socket: Socket, @MessageBody('sessionId') sessionId: number, @MessageBody('dst') dst: string): Promise<void> {
-    console.log('请求进来')
+  @SubscribeMessage('/task/ls')
+  async ls(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string
+  ): Promise<R<IFile[]>> {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    const data = await ls(client, src)
+    return R.success(data)
+  }
 
-    const session = await this.sessionService.findById(sessionId)
-    console.log(session)
-    const client = new Client()
+  @SubscribeMessage('/task/mkdir')
+  async mkdir(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('dst') dst: string
+  ) {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    await mkdir(client, dst)
+    return R.success()
+  }
+
+  @SubscribeMessage('/task/mv')
+  async mv(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string,
+    @MessageBody('dst') dst: string
+  ) {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    await mv(client, src, dst)
+    return R.success()
+  }
+
+  @SubscribeMessage('/task/rm')
+  async rm(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string
+  ) {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    await rm(client, src)
+    return R.success()
+  }
+
+  @SubscribeMessage('/task/put')
+  async put(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string,
+    @MessageBody('dst') dst: string
+  ) {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    await put(client, src, dst, (total, current) => socket.emit('/taks/put/progress', { total, current }))
+    return R.success()
+  }
+
+  @SubscribeMessage('/task/get')
+  async get(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string,
+    @MessageBody('dst') dst: string
+  ) {
+    this.beforeCommand(sessionId)
+    const client = this.ctx.get(sessionId)
+    await get(client, src, dst, (total, current) => socket.emit('/taks/get/progress', { total, current }))
+    return R.success()
+  }
+
+  @SubscribeMessage('/task/active')
+  async active(@ConnectedSocket() socket: Socket) {
+    const data = [...this.ctx.keys()]
+    return R.success(data)
+  }
+
+  @SubscribeMessage('/task/access')
+  async access(@ConnectedSocket() socket: Socket, @MessageBody('sessionId') sessionId: number) {
+    this.beforeCommand(sessionId)
+    return R.success()
   }
 }

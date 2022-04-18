@@ -1,4 +1,4 @@
-export interface IFileDTO {
+export interface IFile {
   type: 'd' | '-'
   name: string
   path: string

@@ -4,5 +4,4 @@ import { FSController } from './fs.controller'
 @Module({
   controllers: [FSController]
 })
-export class FSModule {
-}
+export class FSModule {}

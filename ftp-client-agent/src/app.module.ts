@@ -5,7 +5,6 @@ import { DB_PATH } from './config'
 import { SessionModule } from './modules/session/session.module'
 import { FSModule } from './modules/fs/fs.module'
 import { FTPModule } from './modules/ftp/ftp.module'
-import { FTPGateway } from './modules/ftp/ftp.gateway'
 
 @Module({
   imports: [
@@ -17,7 +16,7 @@ import { FTPGateway } from './modules/ftp/ftp.gateway'
     SessionModule,
     FSModule,
     FTPModule,
-    FTPGateway
+    FTPModule
   ]
 })
 export class AppModule {}

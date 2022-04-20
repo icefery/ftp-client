@@ -18,7 +18,7 @@ export class FTPGateway {
   ) {}
 
   async beforeCommand(sessionId: number): Promise<void> {
-    if (!this.ctx.has(sessionId)) {
+    if (!this.ctx.has(sessionId) || this.ctx.get(sessionId).closed) {
       const session = await this.sessionRepository.findOneBy({ id: sessionId })
       if (!session) {
         throw new WsException(`Session [${sessionId}] does not exist`)

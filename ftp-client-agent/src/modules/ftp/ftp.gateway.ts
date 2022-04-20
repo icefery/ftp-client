@@ -6,7 +6,7 @@ import { Repository } from 'typeorm'
 import { R } from '../../utils/response'
 import { ls, mkdir, mv, rm, get, put } from './ftp.function'
 import { Client } from 'basic-ftp'
-import { IFile } from 'test/ftp.api'
+import { IFile } from '../fs/fs.interface'
 
 @WebSocketGateway({ namespace: '/ftp', cors: { origin: '*' } })
 export class FTPGateway {

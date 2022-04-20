@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Session } from '../session/session.entity'
 import { Repository } from 'typeorm'
 import { R } from '../../utils/response'
-import { get, ls, mkdir, mv, put, rm } from './ftp.function'
+import { back, get, ls, mkdir, mv, put, rm } from './ftp.function'
 import { Client } from 'basic-ftp'
 import { IFile } from '../fs/fs.interface'
 
@@ -36,8 +36,7 @@ export class FTPGateway {
     @MessageBody('src') src: string
   ): Promise<R<IFile[]>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    const data = await ls(client, src)
+    const data = await ls(this.ctx.get(sessionId), src)
     return R.success(data)
   }
 
@@ -48,9 +47,19 @@ export class FTPGateway {
     @MessageBody('dst') dst: string
   ): Promise<R<void>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    await mkdir(client, dst)
+    await mkdir(this.ctx.get(sessionId), dst)
     return R.success()
+  }
+
+  @SubscribeMessage('/task/bask')
+  async back(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('sessionId') sessionId: number,
+    @MessageBody('src') src: string
+  ): Promise<R<string>> {
+    await this.beforeCommand(sessionId)
+    const data = await back(this.ctx.get(sessionId), src)
+    return R.success(data)
   }
 
   @SubscribeMessage('/task/mv')
@@ -61,8 +70,7 @@ export class FTPGateway {
     @MessageBody('dst') dst: string
   ): Promise<R<void>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    await mv(client, src, dst)
+    await mv(this.ctx.get(sessionId), src, dst)
     return R.success()
   }
 
@@ -73,8 +81,7 @@ export class FTPGateway {
     @MessageBody('src') src: string
   ): Promise<R<void>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    await rm(client, src)
+    await rm(this.ctx.get(sessionId), src)
     return R.success()
   }
 
@@ -86,8 +93,8 @@ export class FTPGateway {
     @MessageBody('dst') dst: string
   ): Promise<R<void>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    await put(client, src, dst, (total, current) => socket.emit('/taks/put/progress', { total, current }))
+    const callback = (total, current) => socket.emit('/taks/put/progress', { total, current })
+    await put(this.ctx.get(sessionId), src, dst, callback)
     return R.success()
   }
 
@@ -99,8 +106,8 @@ export class FTPGateway {
     @MessageBody('dst') dst: string
   ): Promise<R<void>> {
     await this.beforeCommand(sessionId)
-    const client = this.ctx.get(sessionId)
-    await get(client, src, dst, (total, current) => socket.emit('/taks/get/progress', { total, current }))
+    const callback = (total, current) => socket.emit('/taks/get/progress', { total, current })
+    await get(this.ctx.get(sessionId), src, dst, callback)
     return R.success()
   }
 

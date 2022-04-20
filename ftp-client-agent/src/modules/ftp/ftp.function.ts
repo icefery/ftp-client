@@ -18,6 +18,11 @@ export async function ls(client: Client, src: string): Promise<IFile[]> {
   }, [])
 }
 
+export async function back(client: Client, src: string): Promise<string> {
+  return path.posix.dirname(src)
+}
+
+
 export async function mkdir(client: Client, dst: string): Promise<void> {
   await client.ensureDir(dst)
 }

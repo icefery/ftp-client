@@ -11,7 +11,8 @@ import { FTPModule } from './modules/ftp/ftp.module'
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: DB_PATH,
-      autoLoadEntities: true
+      autoLoadEntities: true,
+      synchronize: true
     }),
     SessionModule,
     FSModule,

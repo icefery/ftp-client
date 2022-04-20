@@ -1,11 +1,25 @@
 <template>
-  <n-layout has-sider>
-    <n-layout-sider content-style="padding: 24px;"> 海淀桥</n-layout-sider>
-    <n-layout-content content-style="padding: 24px;">
-      <FTPCard />
-    </n-layout-content>
-  </n-layout>
+  <el-container>
+    <el-aside width="200px">
+      <LayoutAside />
+    </el-aside>
+    <el-container>
+      <el-header>
+        <LayoutHeader />
+      </el-header>
+      <el-main>
+        <LayoutMain />
+      </el-main>
+      <el-footer>
+        <LayoutFooter />
+      </el-footer>
+    </el-container>
+  </el-container>
 </template>
+
 <script setup>
-import FTPCard from './FTPCard.vue'
+import LayoutHeader from './LayoutHeader.vue'
+import LayoutMain from './LayoutMain.vue'
+import LayoutFooter from './LayoutFooter.vue'
+import LayoutAside from './LayoutAside.vue'
 </script>

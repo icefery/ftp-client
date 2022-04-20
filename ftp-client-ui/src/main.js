@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
-import naive from 'naive-ui'
-import Antd from 'ant-design-vue'
+
 import App from './App.vue'
-import 'ant-design-vue/dist/antd.css'
+import store from './store'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/src/message.scss'
 
 const app = createApp(App)
-app.use(naive)
-app.use(Antd)
+app.use(store)
+app.use(ElementPlus)
 app.mount('#app')

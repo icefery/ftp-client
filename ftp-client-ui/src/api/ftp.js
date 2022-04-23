@@ -1,11 +1,7 @@
-import { io } from 'socket.io-client'
-import { message } from 'ant-design-vue'
-import { WS_BASE_URL } from '../config'
-
 import { http, ws } from '../utils/request'
 
 export async function ls(sessionId, src) {
-  return ws.emit('/ftp/ls', { sessionId, src })
+  return http.get('/ftp/ls', { params: { sessionId, src } }).then((response) => response.data.data)
 }
 
 export async function rm(sessionId, src) {

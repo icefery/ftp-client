@@ -4,8 +4,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver, AntDesignVueResolver, ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
-import Components from 'unplugin-vue-components/vite'
-
 export default defineConfig({
   plugins: [
     vue(),

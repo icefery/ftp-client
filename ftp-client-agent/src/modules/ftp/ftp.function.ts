@@ -3,7 +3,7 @@ import { IFile } from '../fs/fs.interface'
 import { Client, FileType } from 'basic-ftp'
 import * as path from 'path'
 import * as fs from 'fs'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 
 export async function access(session: Session): Promise<void> {
   const client = new Client()

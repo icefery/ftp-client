@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -25,6 +25,7 @@
     "@nestjs/websockets": "^8.4.4",
     "basic-ftp": "^4.6.6",
     "better-sqlite3": "^7.5.1",
+    "dayjs": "^1.11.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Post, Put, Query } from '@nestjs/common'
 
 import { IFile } from './fs.interface'
-import { R } from '../../utils/response'
+import R from '../../utils/r'
 
 import { ls, mkdir, mv, rm } from './fs.function'
 

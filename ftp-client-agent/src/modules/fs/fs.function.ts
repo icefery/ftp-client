@@ -1,16 +1,18 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { IFile } from './fs.interface'
+import * as dayjs from 'dayjs'
 
 export async function ls(src: string): Promise<IFile[]> {
   return fs.readdirSync(src).reduce<IFile[]>((prev, curr) => {
     const filename = curr
     const filepath = path.join(src, filename)
     const stats = fs.statSync(filepath)
-    const filesize = stats.size
     const filetype = stats.isDirectory() ? 'd' : stats.isFile() ? '-' : 'unknown'
+    const filesize = stats.size
+    const filetime = dayjs(stats.mtime).format('YYYY-MM-DD hh:mm:ss')
     if (filetype !== 'unknown') {
-      prev.push({ type: filetype, name: filename, path: filepath, size: filesize })
+      prev.push({ filetype, filename, filepath, filesize, filetime })
     }
     return prev
   }, [])

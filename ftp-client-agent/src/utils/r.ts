@@ -1,4 +1,4 @@
-export class R<T> {
+export default class R<T> {
   private constructor(public readonly code: number, public readonly message: string, public readonly data: T) {}
 
   public static success<T = void>(data: T = null): R<T> {

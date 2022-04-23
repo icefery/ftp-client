@@ -1,6 +1,7 @@
 export interface IFile {
-  type: 'd' | '-'
-  name: string
-  path: string
-  size: number
+  filename: string
+  filetype: 'd' | '-' | 'l'
+  filepath: string
+  filesize: number
+  filetime: string
 }

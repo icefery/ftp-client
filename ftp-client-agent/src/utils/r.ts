@@ -5,7 +5,7 @@ export default class R<T> {
     return new R<T>(0, 'success', data)
   }
 
-  public static failure(code: number = -1, message: string = 'failure'): R<void> {
+  public static failure(message: string = 'failure', code: number = -1): R<void> {
     return new R<void>(code, message, null)
   }
 }

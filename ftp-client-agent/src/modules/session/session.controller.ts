@@ -18,7 +18,7 @@ export class SessionController {
   }
 
   @Post()
-  async create(entity: Session): Promise<R<void>> {
+  async create(@Body() entity: Session): Promise<R<void>> {
     await this.repository.insert(entity)
     return R.success(null)
   }

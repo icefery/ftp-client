@@ -33,7 +33,7 @@ export class FTPController {
     return R.success()
   }
 
-  @Delete('/mv')
+  @Delete('/rm')
   async rm(@Query('sessionId') sessionId: number, @Query('src') src: string) {
     const session = await this.sessionRepository.findOneBy({ id: sessionId })
     await rm(session, src)

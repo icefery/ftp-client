@@ -20,7 +20,7 @@ export class FSController {
   }
 
   @Delete('/rm')
-  async rm(@Query('dst') src: string): Promise<R<void>> {
+  async rm(@Query('src') src: string): Promise<R<void>> {
     await rm(src)
     return R.success()
   }

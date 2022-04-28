@@ -5,6 +5,7 @@ import { DB_PATH } from './config'
 import { SessionModule } from './modules/session/session.module'
 import { FSModule } from './modules/fs/fs.module'
 import { FTPModule } from './modules/ftp/ftp.module'
+import { OSModule } from './modules/os/os.module'
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { FTPModule } from './modules/ftp/ftp.module'
       synchronize: true
     }),
     SessionModule,
+    OSModule,
     FSModule,
-    FTPModule,
     FTPModule
   ]
 })

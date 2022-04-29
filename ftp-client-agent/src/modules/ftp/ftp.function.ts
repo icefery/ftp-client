@@ -48,7 +48,11 @@ export async function mv(session: Session, src: string, dst: string): Promise<vo
 export async function rm(session: Session, src: string): Promise<void> {
   const client = new Client(FTP_TIMEOUT)
   await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
-  await client.removeDir(src)
+  try {
+    await client.remove(src)
+  } catch (e) {
+    await client.removeDir(src)
+  }
   client.close()
 }
 
@@ -77,7 +81,7 @@ export async function get(
   await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
   const total = await client.size(src)
   client.trackProgress((info) => callback(total, info.bytes))
-  await client.downloadTo(src, dst)
+  await client.downloadTo(dst, src)
   client.trackProgress()
   client.close()
 }

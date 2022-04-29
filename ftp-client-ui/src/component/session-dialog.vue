@@ -47,7 +47,14 @@
           </el-form-item>
           <el-form-item>
             <el-button-group size="small" style="width: 100%">
-              <el-button :plain="true" :round="true" type="primary" :disabled="saveButtonDisabled" style="width: 50%" @click="handleSaveButtonClick">
+              <el-button
+                :plain="true"
+                :round="true"
+                type="primary"
+                :disabled="saveButtonDisabled"
+                style="width: 50%"
+                @click="handleSaveButtonClick"
+              >
                 保存
               </el-button>
               <el-button
@@ -76,7 +83,10 @@ import { ACTION__SAVE, ACTION__REMOVE } from '../store/session.store'
 const store = useStore()
 
 const props = defineProps({
-  session: { type: Object, default: { id: null, name: '', type: 'FTP', host: '127.0.0.1', port: 21, user: 'ftp', pass: '' } }
+  session: {
+    type: Object,
+    default: { id: null, name: '', type: 'FTP', host: '127.0.0.1', port: 21, user: 'ftp', pass: '' }
+  }
 })
 
 const model = reactive({

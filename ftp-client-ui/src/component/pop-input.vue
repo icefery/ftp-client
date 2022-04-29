@@ -1,12 +1,12 @@
 <template>
-  <el-popover v-model="model.visible">
+  <el-popover trigger="click">
     <template #reference>
       <slot></slot>
     </template>
     <template #default>
       <el-row :gutter="4">
         <el-col :span="20">
-          <el-input size="small" v-model="model.value" @input="event => emit('update:value', event)" />
+          <el-input size="small" v-model="newValue" />
         </el-col>
         <el-col :span="4">
           <el-button
@@ -14,8 +14,8 @@
             type="primary"
             style="width: 100%"
             :plain="true"
-            @click="event => handleClick()"
-            :disabled="model.value === model.initValue"
+            @click=";(emit('confirm', newValue) || true) && ((model.initValue = props.value) || true)"
+            :disabled="newValue === model.initValue"
           >
             <el-icon>
               <Check />
@@ -29,22 +29,20 @@
 
 <script setup>
 import { Check } from '@element-plus/icons-vue'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 
 const props = defineProps({
-  initValue: { type: String, default: '' },
   value: { type: String, default: '' }
 })
 
-const emit = defineEmits(['update:visible', 'update:value', 'confirm'])
+const emit = defineEmits(['update:value', 'update:visible', 'confirm'])
 
 const model = reactive({
-  visible: false,
-  initValue: props.initValue !== '' ? props.initValue : props.value,
-  value: props.initValue !== '' ? props.initValue : props.value
+  initValue: props.value
 })
 
-const handleClick = async () => {
-  console.log(model)
-}
+const newValue = computed({
+  get: () => props.value,
+  set: newValue => emit('update:value', newValue)
+})
 </script>

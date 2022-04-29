@@ -7,14 +7,15 @@ export const ACTION__CURRENT = 'ACTION__CURRENT'
 export const ACTION__CONNECT = 'ACTION__CONNECT'
 export const ACTION__DISCONNECT = 'ACTION__DISCONNECT'
 export const ACTION__CD = 'ACTION__CD'
-export const ACTION__LS_PWD = 'ACTION__LS_PWD'
 export const ACTION__MKDIR = 'ACTION__MKDIR'
 export const ACTION__RM = 'ACTION__RM'
 export const ACTION__MV = 'ACTION__MV'
 
 const state = {
-  tabs: new Map([['本地会话', { title: '本地会话', session: { name: '本地会话', type: 'FS' }, pwd: '/Users/icefery', ls: [] }]]),
-  current: null
+  tabs: new Map([
+    ['本地会话', { title: '本地会话', session: { name: '本地会话', type: 'FS' }, pwd: '/Users/icefery', ls: [] }]
+  ]),
+  current: null,
 }
 
 const mutations = {
@@ -22,6 +23,9 @@ const mutations = {
 }
 
 const actions = {
+  input: async ({ state, commit, dispatch }, { input }) => {
+    commit(MUTATION__MERGE_STATE, { input })
+  },
   // 切换当前会话
   [ACTION__CURRENT]: async ({ state, commit, dispatch }, { title }) => {
     const current = state.tabs.get(title)

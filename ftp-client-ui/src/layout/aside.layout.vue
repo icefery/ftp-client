@@ -4,7 +4,12 @@
       <Plus />
     </el-icon>
   </el-button>
-  <el-tree :data="store.state.sessionModule.trees" :props="{ label: 'name' }" :default-expand-all="true" @node-click="onNodeClick"></el-tree>
+  <el-tree
+    :data="store.state.sessionModule.trees"
+    :props="{ label: 'name' }"
+    :default-expand-all="true"
+    @node-click="onNodeClick"
+  ></el-tree>
   <el-dialog v-model="model.dialog.visible">
     <SessionDialog />
   </el-dialog>

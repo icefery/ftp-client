@@ -22,4 +22,7 @@ export class Session {
 
   @Column({ type: 'text' })
   pass: string
+
+  @Column({ type: 'text' })
+  init: string
 }

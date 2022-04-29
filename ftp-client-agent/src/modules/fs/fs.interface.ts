@@ -1,7 +1,7 @@
-export interface IFile {
-  filename: string
-  filetype: 'd' | '-' | 'l'
-  filepath: string
-  filesize: number
-  filetime: string
+export interface File {
+  name: string
+  type: 'd' | '-'
+  path: string
+  size: number
+  time: string
 }

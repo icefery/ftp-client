@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Post, Put, Query } from '@nestjs/common'
 
-import { IFile } from './fs.interface'
+import { File } from './fs.interface'
 import R from '../../utils/r'
 
 import { ls, mkdir, mv, rm } from './fs.function'
@@ -8,7 +8,7 @@ import { ls, mkdir, mv, rm } from './fs.function'
 @Controller('/fs')
 export class FSController {
   @Get('/ls')
-  async ls(@Query('src') src: string): Promise<R<IFile[]>> {
+  async ls(@Query('src') src: string): Promise<R<File[]>> {
     const data = await ls(src)
     return R.success(data)
   }

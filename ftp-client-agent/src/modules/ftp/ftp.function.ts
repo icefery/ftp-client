@@ -1,5 +1,5 @@
 import { Session } from '../session/session.entity'
-import { IFile } from '../fs/fs.interface'
+import { File } from '../fs/fs.interface'
 import { Client, FileType } from 'basic-ftp'
 import { FTP_TIMEOUT } from '../../config'
 import * as path from 'path'
@@ -12,17 +12,17 @@ export async function access(session: Session): Promise<void> {
   client.close()
 }
 
-export async function ls(session: Session, src: string): Promise<IFile[]> {
+export async function ls(session: Session, src: string): Promise<File[]> {
   const client = new Client(FTP_TIMEOUT)
   await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
-  const result = (await client.list(src)).reduce<IFile[]>((prev, curr) => {
+  const result = (await client.list(src)).reduce<File[]>((prev, curr) => {
     const filename = curr.name
     const filetype = curr.type === FileType.Directory ? 'd' : curr.type === FileType.File ? '-' : 'unknown'
     const filepath = path.posix.join(src, filename)
     const filesize = curr.size
     const filetime = dayjs(curr.rawModifiedAt).format('YYYY-MM-DD hh:mm:ss')
     if (filetype !== 'unknown') {
-      prev.push({ filename, filetype, filepath, filesize, filetime })
+      prev.push({ name: filename, type: filetype, path: filepath, size: filesize, time: filetime })
     }
     return prev
   }, [])

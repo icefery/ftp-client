@@ -1,10 +1,10 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { IFile } from './fs.interface'
+import { File } from './fs.interface'
 import * as dayjs from 'dayjs'
 
-export async function ls(src: string): Promise<IFile[]> {
-  return fs.readdirSync(src).reduce<IFile[]>((prev, curr) => {
+export async function ls(src: string): Promise<File[]> {
+  return fs.readdirSync(src).reduce<File[]>((prev, curr) => {
     const filename = curr
     const filepath = path.join(src, filename)
     const stats = fs.statSync(filepath)
@@ -12,7 +12,7 @@ export async function ls(src: string): Promise<IFile[]> {
     const filesize = stats.size
     const filetime = dayjs(stats.mtime).format('YYYY-MM-DD hh:mm:ss')
     if (filetype !== 'unknown') {
-      prev.push({ filetype, filename, filepath, filesize, filetime })
+      prev.push({ type: filetype, name: filename, path: filepath, size: filesize, time: filetime })
     }
     return prev
   }, [])

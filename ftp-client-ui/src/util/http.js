@@ -8,8 +8,10 @@ http.interceptors.response.use(
   response => {
     if (response.data.code !== 0) {
       console.log(response.data)
+      return Promise.reject(new Error(response.data.message))
+    } else {
+      return response
     }
-    return response
   },
   error => {
     console.log(error)

@@ -1,0 +1,101 @@
+<template>
+  <Pwd
+    v-model:pwd="model.pwd"
+    @pwd-enter="() => cdAndLs(model.pwd)"
+    @back-click="() => back()"
+    @mkdir-click="dstName => mkdir(dstName)"
+  />
+  <Ls
+    :index="props.index"
+    @dir-double-click="row => cdAndLs(row.path)"
+    @mv-click="(srcPath, dstName) => mv(srcPath, dstName)"
+    @rm-click="srcPath => rm(srcPath)"
+    @upload-click="(srcName, srcPath) => upload(srcName, srcPath, store.state.tabModule.current.pwd)"
+    @download-click="(srcName, srcPath) => download(srcName, srcPath, store.state.tabModule.local.pwd)"
+  />
+</template>
+
+<script setup>
+import { onMounted, reactive } from 'vue'
+import { useStore } from 'vuex'
+import Pwd from './pwd.vue'
+import { ACTION__CD_AND_LS, ACTION__GET, ACTION__MKDIR, ACTION__MV, ACTION__PUT, ACTION__RM } from '../store/tab.store'
+
+import osAPI from '../api/os.api'
+import Ls from './ls.vue'
+
+const props = defineProps({
+  index: { type: Number },
+  position: { type: String },
+  title: { type: String },
+  session: { type: Object }
+})
+
+const model = reactive({
+  pwd: props.session.init,
+  mkdir: '',
+  mv: ''
+})
+
+const store = useStore()
+
+const cdAndLs = async srcPath => {
+  model.pwd = srcPath
+  await store.dispatch(`tabModule/${ACTION__CD_AND_LS}`, {
+    index: props.index,
+    src: srcPath
+  })
+}
+
+const back = async () => {
+  model.pwd = await osAPI.resolve([model.pwd, '..'])
+  await cdAndLs(model.pwd)
+}
+
+const mkdir = async dstName => {
+  const dst = await osAPI.resolve([model.pwd, dstName])
+  await store.dispatch(`tabModule/${ACTION__MKDIR}`, {
+    index: props.index,
+    dst
+  })
+  model.mkdir = ''
+}
+
+const rm = async srcPath => {
+  await store.dispatch(`tabModule/${ACTION__RM}`, {
+    index: props.index,
+    src: srcPath
+  })
+}
+
+const mv = async (srcPath, dstName) => {
+  const dstPath = await osAPI.resolve([model.pwd, dstName])
+  await store.dispatch(`tabModule/${ACTION__MV}`, {
+    index: props.index,
+    src: srcPath,
+    dst: dstPath
+  })
+}
+
+const upload = async (srcName, srcPath, dstPwd) => {
+  const dstPath = await osAPI.resolve([dstPwd, srcName])
+  await store.dispatch(`tabModule/${ACTION__PUT}`, {
+    index: store.state.tabModule.current.index,
+    src: srcPath,
+    dst: dstPath
+  })
+}
+
+const download = async (srcName, srcPath, dstPwd) => {
+  const dstPath = await osAPI.resolve([dstPwd, srcName])
+  await store.dispatch(`tabModule/${ACTION__GET}`, {
+    index: store.state.tabModule.current.index,
+    src: srcPath,
+    dst: dstPath
+  })
+}
+
+onMounted(async () => {
+  await cdAndLs(model.pwd)
+})
+</script>

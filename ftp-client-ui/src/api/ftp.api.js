@@ -8,7 +8,7 @@ export async function ls(sessionId, src) {
       method: 'GET',
       params: { sessionId, src }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function mkdir(sessionId, dst) {
@@ -18,7 +18,7 @@ export async function mkdir(sessionId, dst) {
       method: 'POST',
       params: { sessionId, dst }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function rm(sessionId, src) {
@@ -28,7 +28,7 @@ export async function rm(sessionId, src) {
       method: 'DELETE',
       params: { sessionId, src }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function mv(sessionId, src, dst) {
@@ -38,17 +38,17 @@ export async function mv(sessionId, src, dst) {
       method: 'PUT',
       params: { sessionId, src, dst }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function get(sessionId, src, dst, callback) {
-  const handler = { event: '/ftp/get/progress', callback }
-  return ws.emit('/ftp/get', { sessionId, src, dst }, [handler])
+  const eventHandlers = new Map([['/ftp/get/progress', (event, data) => callback(data.total, data.current)]])
+  return ws.emit('/ftp/get', { sessionId, src, dst }, eventHandlers)
 }
 
 export async function put(sessionId, src, dst, callback) {
-  const handler = { event: '/ftp/put/progress', callback }
-  return ws.emit('/ftp/put', { sessionId, src, dst }, [handler])
+  const eventHandlers = new Map([['/ftp/put/progress', (event, data) => callback(data.total, data.current)]])
+  return ws.emit('/ftp/put', { sessionId, src, dst }, eventHandlers)
 }
 
 export default { ls, mkdir, rm, mv, get, put }

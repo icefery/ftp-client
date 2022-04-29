@@ -4,8 +4,8 @@ import { io } from 'socket.io-client'
 
 import { WS_BASE_URL } from '../config'
 
-export default {
-  emit: (event, data, ...handlers) => {
+const ws = {
+  emit: (event, data, eventHandlers) => {
     return new Promise((resolve, reject) => {
       const socket = io(`${WS_BASE_URL}`)
       socket.on('connect', () => {
@@ -22,9 +22,12 @@ export default {
         console.log(error)
         reject(error)
       })
-      handlers.forEach(handler => {
-        socket.on(handler.event, r => handler.callback(r))
+
+      eventHandlers.forEach((handler, event) => {
+        socket.on(event, data => handler(event, data))
       })
     })
   }
 }
+
+export default ws

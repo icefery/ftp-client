@@ -7,7 +7,7 @@ export async function resolve(pathSegments) {
       method: 'POST',
       data: pathSegments
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export default { resolve }

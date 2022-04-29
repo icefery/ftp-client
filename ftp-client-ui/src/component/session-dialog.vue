@@ -45,6 +45,9 @@
           <el-form-item label="密码">
             <el-input v-model="model.editing.pass" type="password" :show-password="true" />
           </el-form-item>
+          <el-form-item label="入口">
+            <el-input v-model="model.editing.init" />
+          </el-form-item>
           <el-form-item>
             <el-button-group size="small" style="width: 100%">
               <el-button
@@ -62,7 +65,7 @@
                 :round="true"
                 type="danger"
                 style="width: 50%"
-                :disabled="model.editing.id ? false : true"
+                :disabled="!model.editing.id"
                 @click="handleRemoveButtonClick"
               >
                 删除
@@ -85,7 +88,7 @@ const store = useStore()
 const props = defineProps({
   session: {
     type: Object,
-    default: { id: null, name: '', type: 'FTP', host: '127.0.0.1', port: 21, user: 'ftp', pass: '' }
+    default: { id: null, name: '', type: 'FTP', host: '127.0.0.1', port: 21, user: 'ftp', pass: '', init: '' }
   }
 })
 

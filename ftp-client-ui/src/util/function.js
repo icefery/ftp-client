@@ -20,7 +20,7 @@ export function buildTree(data, key, separator) {
   return roots
 }
 
-export function formatSize(size) {
+export function formatSize(size, scale = 1) {
   const map = new Map([
     ['T', 2 ** 40],
     ['G', 2 ** 30],
@@ -30,7 +30,7 @@ export function formatSize(size) {
   ])
   for (const [unit, min] of map) {
     if (size >= min) {
-      return Math.round(min === 0 ? 0 : (size / min) * 10) / 10 + unit
+      return Math.round(min === 0 ? 0 : (size / min) * (scale * 10)) / (scale * 10) + unit
     }
   }
   return size

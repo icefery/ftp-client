@@ -1,5 +1,5 @@
 <template>
-  <el-popover trigger="click">
+  <el-popover trigger="click" :title="props.title">
     <template #reference>
       <slot></slot>
     </template>
@@ -14,8 +14,8 @@
             type="primary"
             style="width: 100%"
             :plain="true"
-            @click=";(emit('confirm', newValue) || true) && ((model.initValue = props.value) || true)"
-            :disabled="newValue === model.initValue"
+            @click="() => emit('confirm', newValue)"
+            :disabled="newValue === '' || newValue === props.initValue"
           >
             <el-icon>
               <Check />
@@ -29,17 +29,15 @@
 
 <script setup>
 import { Check } from '@element-plus/icons-vue'
-import { computed, reactive } from 'vue'
+import { computed, onUpdated } from 'vue'
 
 const props = defineProps({
-  value: { type: String, default: '' }
+  title: { type: String, default: '' },
+  value: { type: String, default: '' },
+  initValue: { type: String, default: '' }
 })
 
 const emit = defineEmits(['update:value', 'update:visible', 'confirm'])
-
-const model = reactive({
-  initValue: props.value
-})
 
 const newValue = computed({
   get: () => props.value,

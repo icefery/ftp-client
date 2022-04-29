@@ -7,7 +7,7 @@ export async function ls(src) {
       method: 'GET',
       params: { src }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function mkdir(dst) {
@@ -17,7 +17,7 @@ export async function mkdir(dst) {
       method: 'POST',
       params: { dst }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function rm(src) {
@@ -27,7 +27,7 @@ export async function rm(src) {
       method: 'DELETE',
       params: { src }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export async function mv(src, dst) {
@@ -37,7 +37,7 @@ export async function mv(src, dst) {
       method: 'PUT',
       params: { src, dst }
     })
-    .then(response => response.data)
+    .then(response => response.data.data)
 }
 
 export default { ls, mkdir, rm, mv }

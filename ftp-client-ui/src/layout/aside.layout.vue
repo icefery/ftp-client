@@ -1,7 +1,7 @@
 <template>
   <el-button size="small" style="width: 100%" @click="() => (model.dialog.visible = true)">
     <el-icon>
-      <Plus />
+      <plus />
     </el-icon>
   </el-button>
   <el-tree
@@ -9,7 +9,7 @@
     :props="{ label: 'name' }"
     :default-expand-all="true"
     @node-click="onNodeClick"
-  ></el-tree>
+  />
   <el-dialog v-model="model.dialog.visible">
     <SessionDialog />
   </el-dialog>
@@ -24,6 +24,7 @@ import { ACTION__F5 } from '../store/session.store'
 import { ACTION__CONNECT } from '../store/tab.store'
 
 import SessionDialog from '../component/session-dialog.vue'
+
 const store = useStore()
 
 const model = reactive({
@@ -39,6 +40,6 @@ const onNodeClick = async node => {
 }
 
 onMounted(async () => {
-  store.dispatch(`sessionModule/${ACTION__F5}`)
+  await store.dispatch(`sessionModule/${ACTION__F5}`)
 })
 </script>

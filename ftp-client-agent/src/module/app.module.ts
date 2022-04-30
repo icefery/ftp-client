@@ -7,7 +7,8 @@ import { FSModule } from './fs/fs.module'
 import { FTPModule } from './ftp/ftp.module'
 import { OSModule } from './os/os.module'
 import { APP_FILTER } from '@nestjs/core'
-import { HttpExceptionFilter } from '../filter/http-exception.filter'
+import { HTTPExceptionFilter } from '../filter/http-exception.filter'
+import { SFTPModule } from './sftp/sftp.module'
 
 @Module({
   imports: [
@@ -20,8 +21,9 @@ import { HttpExceptionFilter } from '../filter/http-exception.filter'
     SessionModule,
     OSModule,
     FSModule,
-    FTPModule
+    FTPModule,
+    SFTPModule
   ],
-  providers: [{ provide: APP_FILTER, useClass: HttpExceptionFilter }]
+  providers: [{ provide: APP_FILTER, useClass: HTTPExceptionFilter }]
 })
 export class AppModule {}

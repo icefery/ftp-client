@@ -12,3 +12,6 @@ export const DB_PATH = path.resolve(CONFIG_PATH, 'ftp-client.db')
 
 // FTP 超时时间
 export const FTP_TIMEOUT = 3000
+
+// SFTP 超时时间
+export const SFTP_TIMEOUT = 3000

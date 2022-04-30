@@ -20,7 +20,7 @@ export async function ls(session: Session, src: string): Promise<File[]> {
     const filetype = curr.type === FileType.Directory ? 'd' : curr.type === FileType.File ? '-' : 'unknown'
     const filepath = path.posix.join(src, filename)
     const filesize = curr.size
-    const filetime = dayjs(curr.rawModifiedAt).format('YYYY-MM-DD hh:mm:ss')
+    const filetime = dayjs(curr.rawModifiedAt).format('YYYY-MM-DD HH:mm:ss')
     if (filetype !== 'unknown') {
       prev.push({ name: filename, type: filetype, path: filepath, size: filesize, time: filetime })
     }

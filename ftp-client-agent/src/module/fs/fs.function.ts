@@ -10,7 +10,7 @@ export async function ls(src: string): Promise<File[]> {
     const stats = fs.statSync(filepath)
     const filetype = stats.isDirectory() ? 'd' : stats.isFile() ? '-' : 'unknown'
     const filesize = stats.size
-    const filetime = dayjs(stats.mtime).format('YYYY-MM-DD hh:mm:ss')
+    const filetime = dayjs(stats.mtime).format('YYYY-MM-DD HH:mm:ss')
     if (filetype !== 'unknown') {
       prev.push({ type: filetype, name: filename, path: filepath, size: filesize, time: filetime })
     }

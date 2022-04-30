@@ -1,21 +1,21 @@
 <template>
-  <el-popover trigger="click" :title="props.title">
+  <el-popover :title="props.title" trigger="click">
     <template #reference>
       <slot></slot>
     </template>
     <template #default>
       <el-row :gutter="4">
         <el-col :span="20">
-          <el-input size="small" v-model="newValue" />
+          <el-input v-model="computedValue" size="small" />
         </el-col>
         <el-col :span="4">
           <el-button
-            size="small"
-            type="primary"
-            style="width: 100%"
+            :disabled="computedValue === '' || computedValue === props.initValue"
             :plain="true"
-            @click="() => emit('confirm', newValue)"
-            :disabled="newValue === '' || newValue === props.initValue"
+            size="small"
+            style="width: 100%"
+            type="primary"
+            @click="() => emit('confirm', computedValue)"
           >
             <el-icon>
               <Check />
@@ -29,7 +29,7 @@
 
 <script setup>
 import { Check } from '@element-plus/icons-vue'
-import { computed, onUpdated } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   title: { type: String, default: '' },
@@ -39,8 +39,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:value', 'update:visible', 'confirm'])
 
-const newValue = computed({
+const computedValue = computed({
   get: () => props.value,
-  set: newValue => emit('update:value', newValue)
+  set: value => emit('update:value', value)
 })
 </script>

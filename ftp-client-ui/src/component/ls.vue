@@ -1,36 +1,36 @@
 <template>
   <el-table
-    :data="index === -1 ? store.state.tabModule.local?.ls : store.state.tabModule.tabs[props.index]?.ls || []"
-    style="width: 100%"
-    size="small"
     :border="true"
+    :data="props.index === -1 ? store.state.tabModule.local?.ls : store.state.tabModule.tabs[props.index]?.ls"
     height="500"
+    size="small"
+    style="width: 100%"
     @row-dblclick="row => row.type === 'd' && emit('dir-double-click', row)"
   >
-    <el-table-column prop="type" label="类型" width="100" sortable align="center">
+    <el-table-column align="center" label="类型" prop="type" sortable width="100">
       <template #default="scope">
         <FileType :type="scope.row.type" />
       </template>
     </el-table-column>
 
-    <el-table-column prop="name" label="名称" sortable show-overflow-tooltip />
+    <el-table-column label="名称" prop="name" show-overflow-tooltip sortable />
 
-    <el-table-column prop="size" label="大小" width="100" sortable align="center">
+    <el-table-column align="center" label="大小" prop="size" sortable width="100">
       <template #default="scope">
         {{ formatSize(scope.row.size) }}
       </template>
     </el-table-column>
 
-    <el-table-column prop="time" label="时间" width="150" sortable align="center" />
+    <el-table-column align="center" label="时间" prop="time" sortable width="150" />
 
-    <el-table-column label="操作" align="center" width="150">
+    <el-table-column align="center" label="操作" width="150">
       <template #default="scope">
         <PopInput
-          v-model:value="model.mv"
+          v-model:value="state.mv"
           :init-value="scope.row.name"
-          @confirm="() => emit('mv-click', scope.row.path, model.mv) || (model.mv = '')"
+          @confirm="() => emit('mv-click', scope.row.path, state.mv) || (state.mv = '')"
         >
-          <el-button size="small" type="primary" :plain="true" @click="() => (model.mv = scope.row.name)">
+          <el-button :plain="true" size="small" type="primary" @click="() => (state.mv = scope.row.name)">
             <el-icon>
               <edit />
             </el-icon>
@@ -41,7 +41,7 @@
           @confirm="() => emit('rm-click', scope.row.path)"
         >
           <template #reference>
-            <el-button size="small" type="danger" :plain="true">
+            <el-button :plain="true" size="small" type="danger">
               <el-icon>
                 <delete />
               </el-icon>
@@ -50,10 +50,10 @@
         </el-popconfirm>
         <template v-if="props.index === -1">
           <el-button
+            :disabled="!store.state.tabModule.current"
+            :plain="true"
             size="small"
             type="warning"
-            :plain="true"
-            :disabled="!store.state.tabModule.current"
             @click="() => emit('upload-click', scope.row.name, scope.row.path)"
           >
             <el-icon>
@@ -63,10 +63,10 @@
         </template>
         <template v-else>
           <el-button
+            :disabled="!store.state.tabModule.current"
+            :plain="true"
             size="small"
             type="warning"
-            :plain="true"
-            :disabled="!store.state.tabModule.current"
             @click="() => emit('download-click', scope.row.name, scope.row.path)"
           >
             <el-icon>
@@ -80,14 +80,13 @@
 </template>
 
 <script setup>
+import { Delete, Download, Edit, Upload } from '@element-plus/icons-vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
-import FileType from './file-type.vue'
 
 import { formatSize } from '../util/function'
+import FileType from './file-type.vue'
 import PopInput from './pop-input.vue'
-import { reactive } from 'vue'
-
-import { Delete, Download, Edit, Upload } from '@element-plus/icons-vue'
 
 const store = useStore()
 
@@ -97,7 +96,7 @@ const props = defineProps({
 
 const emit = defineEmits(['dir-double-click', 'mv-click', 'rm-click', 'upload-click', 'download-click'])
 
-const model = reactive({
+const state = reactive({
   mv: ''
 })
 </script>

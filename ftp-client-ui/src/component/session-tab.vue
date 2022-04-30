@@ -1,7 +1,7 @@
 <template>
   <Pwd
-    v-model:pwd="model.pwd"
-    @pwd-enter="() => cdAndLs(model.pwd)"
+    v-model:pwd="state.pwd"
+    @pwd-enter="() => cdAndLs(state.pwd)"
     @back-click="() => back()"
     @mkdir-click="dstName => mkdir(dstName)"
   />
@@ -18,11 +18,11 @@
 <script setup>
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
-import Pwd from './pwd.vue'
-import { ACTION__CD_AND_LS, ACTION__GET, ACTION__MKDIR, ACTION__MV, ACTION__PUT, ACTION__RM } from '../store/tab.store'
 
 import osAPI from '../api/os.api'
+import { ACTION__CD_AND_LS, ACTION__GET, ACTION__MKDIR, ACTION__MV, ACTION__PUT, ACTION__RM } from '../store/tab.store'
 import Ls from './ls.vue'
+import Pwd from './pwd.vue'
 
 const props = defineProps({
   index: { type: Number },
@@ -31,7 +31,7 @@ const props = defineProps({
   session: { type: Object }
 })
 
-const model = reactive({
+const state = reactive({
   pwd: props.session.init,
   mkdir: '',
   mv: ''
@@ -40,7 +40,7 @@ const model = reactive({
 const store = useStore()
 
 const cdAndLs = async srcPath => {
-  model.pwd = srcPath
+  state.pwd = srcPath
   await store.dispatch(`tabModule/${ACTION__CD_AND_LS}`, {
     index: props.index,
     src: srcPath
@@ -48,17 +48,17 @@ const cdAndLs = async srcPath => {
 }
 
 const back = async () => {
-  model.pwd = await osAPI.resolve([model.pwd, '..'])
-  await cdAndLs(model.pwd)
+  state.pwd = await osAPI.resolve([state.pwd, '..'])
+  await cdAndLs(state.pwd)
 }
 
 const mkdir = async dstName => {
-  const dst = await osAPI.resolve([model.pwd, dstName])
+  const dst = await osAPI.resolve([state.pwd, dstName])
   await store.dispatch(`tabModule/${ACTION__MKDIR}`, {
     index: props.index,
     dst
   })
-  model.mkdir = ''
+  state.mkdir = ''
 }
 
 const rm = async srcPath => {
@@ -69,7 +69,7 @@ const rm = async srcPath => {
 }
 
 const mv = async (srcPath, dstName) => {
-  const dstPath = await osAPI.resolve([model.pwd, dstName])
+  const dstPath = await osAPI.resolve([state.pwd, dstName])
   await store.dispatch(`tabModule/${ACTION__MV}`, {
     index: props.index,
     src: srcPath,
@@ -96,6 +96,6 @@ const download = async (srcName, srcPath, dstPwd) => {
 }
 
 onMounted(async () => {
-  await cdAndLs(model.pwd)
+  await cdAndLs(state.pwd)
 })
 </script>

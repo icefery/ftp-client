@@ -4,25 +4,24 @@
       <el-tabs type="border-card">
         <el-tab-pane :label="store.state.tabModule.local.title">
           <SessionTab
-            :index="store.state.tabModule.local.index"
+            :index="-1"
             :position="store.state.tabModule.local.position"
-            :title="store.state.tabModule.local.title"
             :session="store.state.tabModule.local.session"
+            :title="store.state.tabModule.local.title"
           />
         </el-tab-pane>
       </el-tabs>
     </el-col>
     <el-col :span="12">
       <el-tabs
-        v-model="model.index"
-        type="border-card"
-        @tab-change="event => changeCurrent(event)"
+        v-model="state.name"
         :closable="true"
-        @tab-remove="event => disconnect(event)"
+        type="border-card"
+        @tab-remove="name => disconnect(Number.parseInt(name))"
       >
-        <template v-for="tab in store.state.tabModule.tabs" :key="tab.index">
-          <el-tab-pane :label="tab.title" :name="tab.index">
-            <SessionTab :index="tab.index" :position="tab.position" :title="tab.title" :session="tab.session" />
+        <template v-for="(tab, index) in store.state.tabModule.tabs" :key="tab.index">
+          <el-tab-pane :label="tab.title" :name="`${index}`">
+            <SessionTab :index="index" :position="tab.position" :session="tab.session" :title="tab.title" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -31,26 +30,30 @@
 </template>
 
 <script setup>
+import { reactive, watch } from 'vue'
 import { useStore } from 'vuex'
-import { ACTION__CHANGE_CURRENT, ACTION__DISCONNECT } from '../store/tab.store'
 import SessionTab from '../component/session-tab.vue'
-import { reactive } from 'vue'
+import { ACTION__CHANGE_CURRENT, ACTION__DISCONNECT } from '../store/tab.store'
 
 const store = useStore()
 
-// 切换当前会话
+const state = reactive({
+  name: '0'
+})
+
 const changeCurrent = async index => {
   await store.dispatch(`tabModule/${ACTION__CHANGE_CURRENT}`, { index })
 }
 
-// 关闭指定会话
 const disconnect = async index => {
   await store.dispatch(`tabModule/${ACTION__DISCONNECT}`, { index })
-  model.index = store.state.tabModule.current.index
-  console.log(store.state.tabModule, model.index)
+  const currentIndex = Number.parseInt(state.name)
+  if (index <= currentIndex) {
+    state.name = `${currentIndex - 1}`
+  }
 }
 
-const model = reactive({
-  index: 0
+watch(state, async (newValue, oldValue) => {
+  await changeCurrent(Number.parseInt(newValue.name))
 })
 </script>

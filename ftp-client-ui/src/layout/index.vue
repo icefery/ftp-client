@@ -16,6 +16,6 @@
 
 <script setup>
 import AsideLayout from './aside.layout.vue'
-import MainLayout from './main.layout.vue'
 import FooterLayout from './footer.layout.vue'
+import MainLayout from './main.layout.vue'
 </script>

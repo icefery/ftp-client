@@ -1,7 +1,7 @@
-import { LOCAL_INIT } from '../config'
-import ftpAPI from '../api/ftp.api'
-import fsAPI from '../api/fs.api'
 import { ElMessage } from 'element-plus'
+import fsAPI from '../api/fs.api'
+import ftpAPI from '../api/ftp.api'
+import { LOCAL_INIT } from '../config'
 import { ACTION__UPDATE_TASK_PROGRESS } from './task.store'
 
 // 增量更新
@@ -27,7 +27,6 @@ export const ACTION__GET = 'ACTION__GET'
 
 const state = {
   local: {
-    index: -1,
     position: 'left',
     title: 'local',
     session: { id: -1, name: 'local', type: 'FS', init: LOCAL_INIT },
@@ -46,10 +45,16 @@ const mutations = {
 const actions = {
   // 切换当前会话
   [ACTION__CHANGE_CURRENT]: async (context, { index }) => {
-    // 下标访问越界会返回 undefined
-    const tab = context.state.tabs[index]
-    if (tab) {
-      context.commit(MUTATION__MERGE_STATE, { current: tab })
+    if (context.state.tabs.length === 0) {
+      context.commit(MUTATION__MERGE_STATE, { current: null })
+    } else if (context.state.tabs.length === 1) {
+      context.commit(MUTATION__MERGE_STATE, { current: context.state.tabs[0] })
+    } else {
+      // 下标访问越界会返回 undefined
+      const tab = context.state.tabs[index]
+      if (tab) {
+        context.commit(MUTATION__MERGE_STATE, { current: tab })
+      }
     }
   },
 
@@ -57,15 +62,18 @@ const actions = {
   [ACTION__CONNECT]: async (context, { session }) => {
     const success = data => {
       const tabs = context.state.tabs
+      const refs = tabs.filter(it => it.session.name === session.name).length
       tabs.push({
-        index: tabs.length,
         position: 'right',
-        title: session.name,
+        title: refs === 0 ? session.name : `${session.name}-${refs + 1}`,
         session,
         pwd: session.init,
         ls: data
       })
-      context.commit(MUTATION__MERGE_STATE, { tabs, current: tabs.length === 1 ? tabs[0] : context.state.current })
+      context.commit(MUTATION__MERGE_STATE, {
+        tabs,
+        current: tabs.length === 1 ? tabs[0] : context.state.current
+      })
     }
     const failure = error => {
       ElMessage({ type: 'error', message: '连接失败', grouping: true })
@@ -82,7 +90,7 @@ const actions = {
     const tabs = context.state.tabs
     if (tabs[index]) {
       tabs.splice(index, 1)
-      context.commit(MUTATION__MERGE_STATE, { tabs, current: tabs.length === 0 ? null : context.state.current })
+      context.commit(MUTATION__MERGE_STATE, { tabs })
     }
   },
 
@@ -187,7 +195,6 @@ const actions = {
 
   // get
   [ACTION__GET]: async (context, { index, src, dst }) => {
-    console.log('开始下载', src, dst)
     const tab = index === -1 ? context.state.local : context.state.tabs[index]
     if (tab) {
       await ftpAPI.get(tab.session.id, src, dst, async (total, current) => {

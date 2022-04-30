@@ -1,33 +1,33 @@
 <template>
-  <el-button size="small" style="width: 100%" @click="() => (model.dialog.visible = true)">
+  <el-button size="small" style="width: 100%" @click="() => (state.dialog.visible = true)">
     <el-icon>
       <plus />
     </el-icon>
   </el-button>
   <el-tree
     :data="store.state.sessionModule.trees"
-    :props="{ label: 'name' }"
     :default-expand-all="true"
+    :props="{ label: 'name' }"
     @node-click="onNodeClick"
   />
-  <el-dialog v-model="model.dialog.visible">
+  <el-dialog v-model="state.dialog.visible">
     <SessionDialog />
   </el-dialog>
 </template>
 
 <script setup>
+import { Plus } from '@element-plus/icons-vue'
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
-import { Plus } from '@element-plus/icons-vue'
+
+import SessionDialog from '../component/session-dialog.vue'
 
 import { ACTION__F5 } from '../store/session.store'
 import { ACTION__CONNECT } from '../store/tab.store'
 
-import SessionDialog from '../component/session-dialog.vue'
-
 const store = useStore()
 
-const model = reactive({
+const state = reactive({
   dialog: {
     visible: false
   }

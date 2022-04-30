@@ -175,41 +175,35 @@ const actions = {
   },
 
   // put
-  [ACTION__PUT]: async (context, { index, src, dst }) => {
-    const tab = index === -1 ? context.state.local : context.state.tabs[index]
-    if (tab) {
-      await ftpAPI.put(tab.session.id, src, dst, async (total, current) => {
-        await context.dispatch(
-          `taskModule/${ACTION__UPDATE_TASK_PROGRESS}`,
-          {
-            type: 'upload',
-            src: { session: context.state.local.session, path: src },
-            dst: { session: tab.session, path: dst },
-            progress: { total, current }
-          },
-          { root: true }
-        )
-      })
-    }
+  [ACTION__PUT]: async (context, { dstSession, srcPath, dstPath }) => {
+    await ftpAPI.put(dstSession.id, srcPath, dstPath, async (total, current) => {
+      await context.dispatch(
+        `taskModule/${ACTION__UPDATE_TASK_PROGRESS}`,
+        {
+          type: 'upload',
+          src: { session: context.state.local.session, path: srcPath },
+          dst: { session: dstSession, path: dstPath },
+          progress: { total, current }
+        },
+        { root: true }
+      )
+    })
   },
 
   // get
-  [ACTION__GET]: async (context, { index, src, dst }) => {
-    const tab = index === -1 ? context.state.local : context.state.tabs[index]
-    if (tab) {
-      await ftpAPI.get(tab.session.id, src, dst, async (total, current) => {
-        await context.dispatch(
-          `taskModule/${ACTION__UPDATE_TASK_PROGRESS}`,
-          {
-            type: 'download',
-            src: { session: tab.session, path: src },
-            dst: { session: context.state.local.session, path: dst },
-            progress: { total, current }
-          },
-          { root: true }
-        )
-      })
-    }
+  [ACTION__GET]: async (context, { srcSession, srcPath, dstPath }) => {
+    await ftpAPI.get(srcSession.id, srcPath, dstPath, async (total, current) => {
+      await context.dispatch(
+        `taskModule/${ACTION__UPDATE_TASK_PROGRESS}`,
+        {
+          type: 'download',
+          src: { session: srcSession, path: srcPath },
+          dst: { session: context.state.local.session, path: dstPath },
+          progress: { total, current }
+        },
+        { root: true }
+      )
+    })
   }
 }
 

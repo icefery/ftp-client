@@ -22,7 +22,6 @@ const ws = {
         console.log(error)
         reject(error)
       })
-
       eventHandlers.forEach((handler, event) => {
         socket.on(event, data => handler(event, data))
       })

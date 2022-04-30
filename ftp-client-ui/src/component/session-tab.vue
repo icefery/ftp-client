@@ -80,18 +80,18 @@ const mv = async (srcPath, dstName) => {
 const upload = async (srcName, srcPath, dstPwd) => {
   const dstPath = await osAPI.resolve([dstPwd, srcName])
   await store.dispatch(`tabModule/${ACTION__PUT}`, {
-    index: store.state.tabModule.current.index,
-    src: srcPath,
-    dst: dstPath
+    dstSession: store.state.tabModule.current.session,
+    srcPath,
+    dstPath
   })
 }
 
 const download = async (srcName, srcPath, dstPwd) => {
   const dstPath = await osAPI.resolve([dstPwd, srcName])
   await store.dispatch(`tabModule/${ACTION__GET}`, {
-    index: store.state.tabModule.current.index,
-    src: srcPath,
-    dst: dstPath
+    srcSession: store.state.tabModule.current.session,
+    srcPath,
+    dstPath
   })
 }
 

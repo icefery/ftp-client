@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { Session } from './session.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import R from '../../utils/r'
+import R from '../../util/r'
 
 @Controller('/session')
 export class SessionController {

@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import * as path from 'path'
-import R from '../../utils/r'
+import R from '../../util/r'
 
 @Controller('/os')
 export class OSController {

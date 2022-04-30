@@ -3,7 +3,7 @@ import { ls, mkdir, mv, rm } from './ftp.function'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Session } from '../session/session.entity'
 import { Repository } from 'typeorm'
-import R from '../../utils/r'
+import R from '../../util/r'
 
 @Controller('/ftp')
 export class FTPController {

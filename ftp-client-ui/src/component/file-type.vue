@@ -15,6 +15,6 @@
 import { Document, Folder } from '@element-plus/icons-vue'
 
 const props = defineProps({
-  type: { type: String, default: '-' }
+  type: { type: String }
 })
 </script>

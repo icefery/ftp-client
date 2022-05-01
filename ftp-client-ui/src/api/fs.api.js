@@ -39,5 +39,3 @@ export async function mv(src, dst) {
     })
     .then(response => response.data.data)
 }
-
-export default { ls, mkdir, rm, mv }

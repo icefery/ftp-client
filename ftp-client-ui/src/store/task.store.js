@@ -1,9 +1,12 @@
+import { ElMessage } from 'element-plus'
+import * as taskAPI from '../api/task.api'
+
 // 增量更新
 export const MUTATION__MERGE_STATE = 'MUTATION__MERGE_STATE'
-// 更新任务进度
-export const ACTION__UPDATE_TASK_PROGRESS = 'ACTION__UPDATE_TASK_PROGRESS'
 // 清理任务
 export const ACTION__CLEAR_TASK = 'ACTION__CLEAR_TASK'
+// 更新进度
+export const ACTION__LISTEN__TASKS = 'ACTION__LISTEN__TASKS'
 
 const state = {
   tasks: []
@@ -14,27 +17,19 @@ const mutations = {
 }
 
 const actions = {
-  // 更新任务进度
-  [ACTION__UPDATE_TASK_PROGRESS]: async (context, newTask) => {
-    console.log('newTask=', context.state, newTask)
-    const oldTask = context.state.tasks.find(
-      it =>
-        it?.type === newTask.type &&
-        it?.src?.session?.id === newTask.src.session.id &&
-        it?.src?.path === newTask.src.path &&
-        it?.dst?.session?.id === newTask.dst.session.id &&
-        it?.dst?.path === newTask.dst.path
-    )
-    if (oldTask) {
-      oldTask.progress = newTask.progress
-    } else {
-      context.state.tasks.push(newTask)
-    }
-    context.commit(MUTATION__MERGE_STATE, { tasks: context.state.tasks })
+  [ACTION__LISTEN__TASKS]: async context => {
+    const failure = () => ElMessage({ type: 'error', message: '加载失败', grouping: true })
+    const success = () => {}
+    const callback = tasks => context.commit(MUTATION__MERGE_STATE, { tasks })
+    taskAPI.listen(callback).then(success).catch(failure)
   },
 
   // 清理任务
-  [ACTION__CLEAR_TASK]: async (context, {}) => {}
+  [ACTION__CLEAR_TASK]: async (context, { ids }) => {
+    const failure = () => ElMessage({ type: 'error', message: '清理失败', grouping: true })
+    const success = () => {}
+    taskAPI.remove(ids).then(success).catch(failure)
+  }
 }
 
 export default {

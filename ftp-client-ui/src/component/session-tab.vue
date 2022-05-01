@@ -18,9 +18,15 @@
 <script setup>
 import { onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
-
-import osAPI from '../api/os.api'
-import { ACTION__CD_AND_LS, ACTION__GET, ACTION__MKDIR, ACTION__MV, ACTION__PUT, ACTION__RM } from '../store/tab.store'
+import * as osAPI from '../api/os.api'
+import {
+  ACTION__CD_AND_LS,
+  ACTION__MKDIR,
+  ACTION__MV,
+  ACTION__RM,
+  ACTION__SUBMIT_DOWNLOAD,
+  ACTION__SUBMIT_UPLOAD
+} from '../store/tab.store'
 import Ls from './ls.vue'
 import Pwd from './pwd.vue'
 
@@ -79,7 +85,7 @@ const mv = async (srcPath, dstName) => {
 
 const upload = async (srcName, srcPath, dstPwd) => {
   const dstPath = await osAPI.resolve([dstPwd, srcName])
-  await store.dispatch(`tabModule/${ACTION__PUT}`, {
+  await store.dispatch(`tabModule/${ACTION__SUBMIT_UPLOAD}`, {
     dstSession: store.state.tabModule.current.session,
     srcPath,
     dstPath
@@ -88,7 +94,7 @@ const upload = async (srcName, srcPath, dstPwd) => {
 
 const download = async (srcName, srcPath, dstPwd) => {
   const dstPath = await osAPI.resolve([dstPwd, srcName])
-  await store.dispatch(`tabModule/${ACTION__GET}`, {
+  await store.dispatch(`tabModule/${ACTION__SUBMIT_DOWNLOAD}`, {
     srcSession: store.state.tabModule.current.session,
     srcPath,
     dstPath
@@ -96,6 +102,9 @@ const download = async (srcName, srcPath, dstPwd) => {
 }
 
 onMounted(async () => {
-  await cdAndLs(state.pwd)
+  // FTP 和 SFTP 在新建建立连接时请求目录
+  if (props.session.type === 'FS') {
+    await cdAndLs(state.pwd)
+  }
 })
 </script>

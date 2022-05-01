@@ -4,5 +4,9 @@ import tabModule from './tab.store'
 import taskModule from './task.store'
 
 export default createStore({
-  modules: { sessionModule, tabModule, taskModule }
+  modules: {
+    sessionModule,
+    tabModule,
+    taskModule
+  }
 })

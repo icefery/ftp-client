@@ -1,9 +1,9 @@
 <template>
   <el-container>
-    <el-aside style="width: 200px">
+    <el-aside style="width: 200px; margin-left: 20px">
       <AsideLayout />
     </el-aside>
-    <el-container>
+    <el-container style="margin-top: -20px">
       <el-main>
         <MainLayout />
       </el-main>

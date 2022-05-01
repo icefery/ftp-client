@@ -9,5 +9,3 @@ export async function resolve(pathSegments) {
     })
     .then(response => response.data.data)
 }
-
-export default { resolve }

@@ -15,5 +15,3 @@ export async function update(id, session) {
 export async function remove(id) {
   return http.delete(`/session/${id}`).then(response => response.data.data)
 }
-
-export default { list, create, update, remove }

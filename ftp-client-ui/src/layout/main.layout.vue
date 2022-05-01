@@ -13,18 +13,20 @@
       </el-tabs>
     </el-col>
     <el-col :span="12">
-      <el-tabs
-        v-model="state.name"
-        :closable="true"
-        type="border-card"
-        @tab-remove="name => disconnect(Number.parseInt(name))"
-      >
-        <template v-for="(tab, index) in store.state.tabModule.tabs" :key="tab.index">
-          <el-tab-pane :label="tab.title" :name="`${index}`">
-            <SessionTab :index="index" :position="tab.position" :session="tab.session" :title="tab.title" />
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <template v-if="store.state.tabModule.tabs.length > 0">
+        <el-tabs
+          v-model="state.name"
+          :closable="true"
+          type="border-card"
+          @tab-remove="name => disconnect(Number.parseInt(name))"
+        >
+          <template v-for="(tab, index) in store.state.tabModule.tabs" :key="tab.index">
+            <el-tab-pane :label="tab.title" :name="`${index}`">
+              <SessionTab :index="index" :position="tab.position" :session="tab.session" :title="tab.title" />
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+      </template>
     </el-col>
   </el-row>
 </template>

@@ -83,6 +83,6 @@ onMounted(async () => {
 
 <style>
 .el-progress-bar__outer {
-  width: 200px !important;
+  width: 180px !important;
 }
 </style>

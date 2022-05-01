@@ -7,7 +7,7 @@ import { TASK__REFRESH_INTERVAL } from '../../config'
 @WebSocketGateway({ namespace: '', cors: { origin: '*' } })
 export class TaskGateway {
   @SubscribeMessage('/task/listen')
-  async list(@ConnectedSocket() socket: Socket) {
+  async list(@ConnectedSocket() socket: Socket): Promise<R<void>> {
     const intervalId = setInterval(
       () => socket.emit('/task/listen/tasks', { tasks: context.tasks }),
       TASK__REFRESH_INTERVAL

@@ -5,6 +5,8 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import * as path from 'path'
 
+const outDir = path.resolve(__dirname, '..', 'ftp-client-agent', 'public')
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -14,6 +16,7 @@ export default defineConfig({
     })
   ],
   build: {
-    outDir: path.resolve(__dirname, '..', 'ftp-client-agent', 'public')
+    outDir,
+    emptyOutDir: outDir
   }
 })

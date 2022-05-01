@@ -19,3 +19,6 @@ export const SFTP_TIMEOUT = 3000
 
 // 本地会话配置
 export const LOCAL_SESSION = { id: -1, name: 'local', type: 'FS', init: HOME_PATH } as Session
+
+// 任务刷新间隔
+export const TASK__REFRESH_INTERVAL = 500

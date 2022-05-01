@@ -1,6 +1,8 @@
 import { Session } from '../module/session/session.entity'
 
 export interface Task {
+  id: number
+  time: string
   type: 'upload' | 'download'
   src: {
     session: Session

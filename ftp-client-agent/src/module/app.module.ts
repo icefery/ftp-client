@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DB_PATH } from '../config'
 import { SessionModule } from './session/session.module'
@@ -9,6 +8,7 @@ import { OSModule } from './os/os.module'
 import { APP_FILTER } from '@nestjs/core'
 import { HTTPExceptionFilter } from '../filter/http-exception.filter'
 import { SFTPModule } from './sftp/sftp.module'
+import { TaskModule } from './task/task.module'
 
 @Module({
   imports: [
@@ -22,7 +22,8 @@ import { SFTPModule } from './sftp/sftp.module'
     OSModule,
     FSModule,
     FTPModule,
-    SFTPModule
+    SFTPModule,
+    TaskModule
   ],
   providers: [{ provide: APP_FILTER, useClass: HTTPExceptionFilter }]
 })

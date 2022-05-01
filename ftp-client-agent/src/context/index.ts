@@ -2,7 +2,7 @@ import { Context, Task } from './type'
 
 export const context: Context = { tasks: [] }
 
-export function updateTask(newTask: Task) {
+export function updateTask(newTask: Task): void {
   const oldTask = context.tasks.find(
     it =>
       it.type === newTask.type &&
@@ -16,4 +16,8 @@ export function updateTask(newTask: Task) {
   } else {
     context.tasks.push(newTask)
   }
+}
+
+export function removeTask(id: number): void {
+  context.tasks.splice(id - 1, 1)
 }

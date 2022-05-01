@@ -1,5 +1,6 @@
 import * as path from 'path'
 import * as os from 'os'
+import { Session } from '../module/session/session.entity'
 
 // 用户主目录
 export const HOME_PATH = os.homedir()
@@ -15,3 +16,6 @@ export const FTP_TIMEOUT = 3000
 
 // SFTP 超时时间
 export const SFTP_TIMEOUT = 3000
+
+// 本地会话配置
+export const LOCAL_SESSION = { id: -1, name: 'local', type: 'FS', init: HOME_PATH } as Session

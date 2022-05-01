@@ -1,7 +1,7 @@
 import { Session } from '../session/session.entity'
 import * as Client from 'ssh2-sftp-client'
 
-import { File } from '../fs/fs.interface'
+import { File } from '../fs/fs.type'
 import * as path from 'path'
 import * as dayjs from 'dayjs'
 import { SFTP_TIMEOUT } from '../../config'

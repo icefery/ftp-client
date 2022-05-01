@@ -1,5 +1,5 @@
 import { Session } from '../session/session.entity'
-import { File } from '../fs/fs.interface'
+import { File } from '../fs/fs.type'
 import { Client, FileType } from 'basic-ftp'
 import { FTP_TIMEOUT } from '../../config'
 import * as path from 'path'
@@ -65,7 +65,7 @@ export async function put(
   const client = new Client(FTP_TIMEOUT)
   await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
   const total = fs.statSync(src).size
-  client.trackProgress((info) => callback(total, info.bytes))
+  client.trackProgress(info => callback(total, info.bytes))
   await client.uploadFrom(src, dst)
   client.trackProgress()
   client.close()
@@ -80,7 +80,7 @@ export async function get(
   const client = new Client(FTP_TIMEOUT)
   await client.access({ host: session.host, port: session.port, user: session.user, password: session.pass })
   const total = await client.size(src)
-  client.trackProgress((info) => callback(total, info.bytes))
+  client.trackProgress(info => callback(total, info.bytes))
   await client.downloadTo(dst, src)
   client.trackProgress()
   client.close()

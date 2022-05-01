@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { File } from './fs.interface'
+import { File } from './fs.type'
 import * as dayjs from 'dayjs'
 
 export async function ls(src: string): Promise<File[]> {

@@ -18,14 +18,14 @@ export class SFTPController {
 
   @Get('/ls')
   async ls(@Query('sessionId') sessionId: number, @Query('src') src: string): Promise<R<File[]>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     const data = await ls(session, src)
     return R.success(data)
   }
 
   @Post('/mkdir')
   async mkdir(@Query('sessionId') sessionId: number, @Query('dst') dst: string): Promise<R<void>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     await mkdir(session, dst)
     return R.success()
   }
@@ -36,14 +36,14 @@ export class SFTPController {
     @Query('src') src: string,
     @Query('dst') dst: string
   ): Promise<R<void>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     await mv(session, src, dst)
     return R.success()
   }
 
   @Delete('/rm')
   async rm(@Query('sessionId') sessionId: number, @Query('src') src: string): Promise<R<void>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     await rm(session, src)
     return R.success()
   }
@@ -54,7 +54,7 @@ export class SFTPController {
     @Query('src') src: string,
     @Query('dst') dst: string
   ): Promise<R<void>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     const id = context.tasks.length + 1
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
     await put(session, src, dst, (total, current) => {
@@ -76,7 +76,7 @@ export class SFTPController {
     @Query('src') src: string,
     @Query('dst') dst: string
   ): Promise<R<void>> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     const id = context.tasks.length + 1
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
     await get(session, src, dst, (total, current) => {

@@ -11,5 +11,5 @@
 /**/dist/
 
 # agent
-ftp-client-agent/main
+ftp-client-agent/bin
 ftp-client-agent/public/

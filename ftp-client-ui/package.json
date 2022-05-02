@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "format": "prettier --write 'src/**/*.(js|jsx|ts|tsx|vue)' 'vite.config.js' 'index.html'"
+    "format": "prettier --write 'src/**/*' 'vite.config.js' 'index.html' '*.json'"
   },
   "dependencies": {
     "axios": "^0.26.1",

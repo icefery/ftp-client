@@ -18,7 +18,7 @@ export class FTPGateway {
     @MessageBody('sessionId') sessionId: number,
     @MessageBody('interval') interval: number
   ): Promise<void> {
-    const session = await this.sessionRepository.findOneBy({ id: sessionId })
+    const session = await this.sessionRepository.findOne({ id: sessionId })
     const callback = async () => {
       await access(session)
       socket.emit(`/ftp/heartbeat/${interval}`)

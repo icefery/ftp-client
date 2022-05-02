@@ -13,7 +13,7 @@ import { TaskModule } from './task/task.module'
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
+      type: 'sqlite',
       database: DB_PATH,
       autoLoadEntities: true,
       synchronize: true

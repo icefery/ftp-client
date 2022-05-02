@@ -22,3 +22,12 @@ export const LOCAL_SESSION = { id: -1, name: 'local', type: 'FS', init: HOME_PAT
 
 // 任务刷新间隔
 export const TASK__REFRESH_INTERVAL = 500
+
+// swagger 文档路径
+export const SWAGGER_PATH = '/swagger'
+
+// swagger 文档标题
+export const SWAGGER_TITLE = 'FTP 客户端'
+
+// 静态资源目录
+export const PUBLIC_PATH = path.resolve(__dirname, '../../../build/ui')

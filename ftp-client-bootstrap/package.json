@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "pip": "pip install --requirement requirements.txt",
+    "uic": "pyside6-uic src/dialog.ui --output src/ui_dialog.py",
+    "package:mac": "pyinstaller --clean --name ftp-client-bootstrap --icon ../build/ui/favicon.ico --noconfirm --onedir --windowed --distpath ../build/bootstrap --add-binary ../build/agent/ftp-client-agent:. src/main.py"
+  }
+}

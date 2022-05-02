@@ -5,7 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import * as path from 'path'
 
-const outDir = path.resolve(__dirname, '..', 'ftp-client-agent', 'public')
+const outDir = path.resolve(__dirname, '../build/ui')
 
 export default defineConfig({
   plugins: [

@@ -12,7 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "package:mac": "pkg . --targets node14-macos-arm64 --compress GZip --output bin/ftp-client-agent",
+    "package:mac": "nest build && pkg . --targets node14-macos-arm64 --compress GZip --output ../build/agent/ftp-client-agent",
     "format": "prettier --write 'src/**/*' '*.json'"
   },
   "bin": "dist/main.js",
@@ -21,7 +21,7 @@
       "node_modules/swagger-ui-dist",
       "node_modules/swagger-ui-express",
       "node_modules/sqlite3/lib/binding/napi-v6-darwin-unknown-arm64/node_sqlite3.node",
-      "public"
+      "../build/ui"
     ]
   },
   "dependencies": {

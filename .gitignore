@@ -1,7 +1,10 @@
-## vscode
+# mac
+/**/.DS_Store
+
+# vscode
 /**/.vscode/
 
-## idea
+# idea
 /**/.idea/
 
 # node
@@ -10,6 +13,9 @@
 /**/package-lock.json
 /**/dist/
 
-# agent
-ftp-client-agent/bin
-ftp-client-agent/public/
+# python
+/**/__pycache__/
+/**/build/
+/**/dist/
+/**/*.spec
+/**/ui_*.py

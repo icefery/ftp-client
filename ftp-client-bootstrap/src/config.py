@@ -11,7 +11,7 @@ CONFIG_PATH = str(pathlib.Path(f'{HOME_PATH}/.ftp-client').resolve())
 AGENT_LOG_PATH = str(pathlib.Path(f'{CONFIG_PATH}/ftp-client-agent.log').resolve())
 
 # pid 文件路径
-AGENT_PIP_PATH = str(pathlib.Path(f'{CONFIG_PATH}/ftp-client-agent.pip').resolve())
+AGENT_PIP_PATH = str(pathlib.Path(f'{CONFIG_PATH}/ftp-client-agent.pid').resolve())
 
 # __dirname
 CONTEXT_PATH = str(pathlib.Path(__file__).parent.resolve())
